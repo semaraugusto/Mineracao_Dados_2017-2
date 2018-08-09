@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1510146390044.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "6513A9EC",
+    "lastKnownWriteTime" : 4294967302,
+    "last_content_update" : 1510146390044,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "1B9A97A1",
+        "caption" : "help",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=help&cache_key=1B9A97A1",
+        "displayedObservations" : "22190",
+        "environment" : "",
+        "object" : "help",
+        "preview" : "0",
+        "totalObservations" : "22190",
+        "variables" : "1"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

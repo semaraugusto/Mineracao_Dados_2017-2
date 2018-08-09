@@ -1,0 +1,5 @@
+"0","retail %>% 
+  ggplot(aes(x=Time)) + 
+  geom_histogram(stat=""count"",fill=""indianred"")
+"
+"2","Ignoring unknown parameters: binwidth, bins, pad"

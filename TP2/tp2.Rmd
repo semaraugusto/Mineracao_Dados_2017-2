@@ -1,0 +1,137 @@
+--- 
+author: Semar Augusto
+title: Food grouping by nutrients
+output: pdf_document
+---
+
+Reading and selecting only columns related to macronutrients or important micronutrients
+```{r}
+library(tidyverse)
+
+df <- base_dados_completa <- read_tsv("foodFacts.tsv")
+df <- select(df, c(8, 64, 66, 67, 100, 102, 112, 113, 117, 159))
+summary(df)
+glimpse(df)
+```
+
+Removing NA, NaN and duplicates
+```{r}
+df <- na.omit(df)
+df[apply(sapply(df, is.finite), 1, all),]
+df <- df %>% distinct(product_name, .keep_all = TRUE)
+head(df)
+```
+
+```{r}
+wss <- (nrow(df[2:9])-1)*sum(apply(df[2:9],2,var))
+for (i in 2:15) wss[i] <- sum(kmeans(df[2:9],
+                                     centers=i)$withinss)
+plot(1:15, wss, type="b", xlab="Number of Clusters",
+     ylab="Within groups sum of squares")
+```
+
+```{r}
+library(vegan)
+
+spe.KM.cascade <- cascadeKM(df[2:9], inf.gr=2, sup.gr=10, iter=100, criterion="ssi")
+plot(spe.KM.cascade, sortg=TRUE)
+```
+
+It seems 6 clusters would be good.
+```{r}
+set.seed(7)
+ 
+grp <- kmeans(df[2:9], 6)
+
+aggregate(df, by=list(grp$cluster), FUN = mean)
+mydata <- data.frame(df, grp$cluster)
+
+ggplot(subset(mydata, grp.cluster == 1)) +
+    geom_bar(aes(x = nutrition.score.fr_100g))
+```
+
+```{r}
+ggplot(subset(mydata, grp.cluster == 1)) +
+    geom_bar(aes(x = nutrition.score.fr_100g))
+
+ggplot(subset(mydata, grp.cluster == 2)) +
+    geom_bar(aes(x = nutrition.score.fr_100g))
+
+ggplot(subset(mydata, grp.cluster == 3)) +
+    geom_bar(aes(x = nutrition.score.fr_100g))
+
+ggplot(subset(mydata, grp.cluster == 4)) +
+    geom_bar(aes(x = nutrition.score.fr_100g))
+
+ggplot(subset(mydata, grp.cluster == 5)) +
+    geom_bar(aes(x = nutrition.score.fr_100g))
+
+ggplot(subset(mydata, grp.cluster == 6)) +
+    geom_bar(aes(x = nutrition.score.fr_100g))
+```
+
+```{r}
+features = df[3:9]
+
+pie(colSums(features[grp$cluster == 1]), cex = 0.5)
+pie(colSums(features[grp$cluster == 2]), cex = 0.5)
+pie(colSums(features[grp$cluster == 3]), cex = 0.5)
+pie(colSums(features[grp$cluster == 4]), cex = 0.5)
+pie(colSums(features[grp$cluster == 5]), cex = 0.5)
+pie(colSums(features[grp$cluster == 6]), cex = 0.5)
+```
+
+```{r}
+features = df[c(3, 6, 7, 8)]
+
+pie(colSums(feature[grp$cluster == 1]), cex = 0.5)
+pie(colSums(features[grp$cluster == 2]), cex = 0.5)
+pie(colSums(features[grp$cluster == 3]), cex = 0.5)
+pie(colSums(features[grp$cluster == 4]), cex = 0.5)
+pie(colSums(features[grp$cluster == 5]), cex = 0.5)
+pie(colSums(features[grp$cluster == 6]), cex = 0.5)
+```
+
+```{r}
+df <- base_dados_completa
+df <- select(df, c(8, 55, 56, 64, 66, 67, 100, 102, 112, 113, 117, 159))
+df <- na.omit(df)
+df <- df %>% distinct(product_name, .keep_all = TRUE)
+
+features <- df[c(5, 8, 9, 10, 11)]
+
+pie(colSums(features[df$pnns_groups_1 == "Fish Meat Eggs",]), cex = 0.5)
+pie(colSums(features[df$pnns_groups_1 == "Milk and dairy products",]), cex = 0.5)
+pie(colSums(features[df$pnns_groups_2 == "Fruits",]), cex = 0.5)
+```
+
+```{r}
+df[df$pnns_groups_2 == "vegetables", ]$pnns_groups_2 <- "Vegetables"
+pie(colSums(features[df$pnns_groups_2 == "Vegetables",]), cex = 0.5)
+```
+
+```{r}
+df[df$pnns_groups_2 == "Biscuits and cakes", "pnns_groups_2"] <- "Sweets"
+df[df$pnns_groups_2 == "Pizza pies and quiche", "pnns_groups_2"] <- "Sweets"
+df[df$pnns_groups_2 == "Appetizers", "pnns_groups_2"] <- "Sweets"
+df[df$pnns_groups_2 == "Sweetened beverages", "pnns_groups_2"] <- "Sweets"
+df[df$pnns_groups_2 == "unknown", "pnns_groups_2"] <- "Sweets"
+df[df$pnns_groups_2 == "Chocolate products","pnns_groups_2"] <- "Sweets"
+df[df$pnns_groups_2 == "Dairy desserts","pnns_groups_2"] <- "Sweets"
+df[df$pnns_groups_2 == "Fats","pnns_groups_2"] <- "Sweets"
+df[df$pnns_groups_2 == "Dressings and sauces", "pnns_groups_2"] <- "Sweets"
+pie(colSums(features[df$pnns_groups_2 == "Sweets",]), cex = 0.5)
+```
+
+```{r}
+df[df$pnns_groups_2 == "Bread", "pnns_groups_2"] <- "Grains"
+df[df$pnns_groups_2 == "Cereals", "pnns_groups_2"] <- "Grains"
+df[df$pnns_groups_2 == "pastries", "pnns_groups_2"] <- "Grains"
+pie(colSums(features[df$pnns_groups_2 == "Grains",]), cex = 0.5)
+```
+
+
+
+
+
+

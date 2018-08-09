@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(tidyverse)\nlibrary(arules)\nlibrary(arulesViz)\nlibrary(plyr)\nlibrary(knitr)\nlibrary(lubridate)\nlibrary(readxl)\n\nretail <- read_excel('Online retail.xlsx')\n# retirando valores faltando\nretail <- retail[complete.cases(retail), ]\n# selecionando somente os itens que foram comprados\nretail <- select(retail, c(\"InvoiceNo\", \"Description\"))\nView(retail)\n\n# agrupando por transação:\nitemList <- ddply(retail, c(\"InvoiceNo\"),\n                  function(df1)paste(df1$Description,\n                                     collapse = \",\"))\nView(itemList)\nwrite.csv(itemList, \"onRetail.csv\", quote = FALSE, row.names = FALSE)\ntr <- read.transactions(\"onRetail.csv\", format = \"basket\", sep = \",\")\ntr\nsummary(tr)",
+    "created" : 1509549562654.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "3296818029",
+    "id" : "6421F668",
+    "lastKnownWriteTime" : 4322483856,
+    "last_content_update" : 1509581614750,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

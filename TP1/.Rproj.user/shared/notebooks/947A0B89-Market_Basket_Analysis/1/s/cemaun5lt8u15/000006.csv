@@ -1,0 +1,5 @@
+"0","retail <- read_excel('Online_retail.xlsx')
+"
+"2","Error in read_fun(path = path, sheet = sheet, limits = limits, shim = shim,  : 
+  zip file 'Online_retail.xlsx' cannot be opened
+"

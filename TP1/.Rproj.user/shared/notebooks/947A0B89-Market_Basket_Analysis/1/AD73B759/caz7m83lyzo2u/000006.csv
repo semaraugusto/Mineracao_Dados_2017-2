@@ -1,0 +1,3 @@
+"0","retail$InvoiceNo <- as.numeric(as.character(retail$InvoiceNo))
+"
+"2","NAs introduced by coercion"
